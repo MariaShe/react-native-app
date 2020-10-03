@@ -8,21 +8,22 @@ import {
     StyleSheet
 } from 'react-native';
 
+
 const Pokemons = (props) => {
     const [pokemons, setPokemons] = useState([]);
 
-    useEffect(() => { findPokemons(); }, []);
+    useEffect(() => { fetchPokemons(); }, []);
     
-    const findPokemons = () => {
+    const fetchPokemons = () => {
         fetch('https://gabbyapp.com/pockemons/data.json')
           .then(response => response.json())
-          .then(pokemons => setPokemons(pokemons.results));
+          .then(pokemons => setPokemons(pokemons));
       };
 
     return (
         <View>
-          <View style={styles.header}>
-            <Text>Pokemons</Text>
+          <View>
+            <Text style={styles.header}>Pokemons</Text>
           </View>
           <ScrollView>
             <View style={styles.container}>
@@ -34,13 +35,18 @@ const Pokemons = (props) => {
                       style={styles.card}
                       onPress={() =>
                         props.navigation.navigate('Details', {
-                          pokemon: pokemon.name,
+                          picture: pokemon.picture,
+                          name: pokemon.name,
+                          type: pokemon.type,
+                          height: pokemon.height,
+                          weight: pokemon.weight,
+                          description: pokemon.description,
                         })
                       }>
                       <Image
                         style={styles.image}
                         source={{
-                          url: `pockemons/i/${pokemon.name}.png`,
+                          uri: `https://gabbyapp.com/${pokemon.picture}`,
                         }}
                       />
                       <Text>{pokemon.name}</Text>
@@ -57,10 +63,8 @@ export default Pokemons;
 
 const styles = StyleSheet.create({
     header: {
-        position: 'absolute',
-        marginBottom: 70,    
-        left: '20%',    
-        zIndex: 1,    
+        textAlign: 'center',
+        fontSize: 25,
         marginTop: 10,   
     },
     container: {
@@ -73,15 +77,12 @@ const styles = StyleSheet.create({
     card: {
         display: 'flex',
         alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: 'black',
         marginHorizontal: 20,
-        marginVertical: 10,
+        marginVertical: 10,        
     },
     image: {
         width: 150,
         height: 150,
     }
-
    
-  });
+});
